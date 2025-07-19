@@ -11,7 +11,7 @@ const parseUrl = (_url: string, queryParams: Record<string, any>) => {
   return url.toString();
 };
 
-const makeGetRequest = async (
+export const makeGetRequest = async (
   url: string,
   queryParams: Record<string, any>
 ) => {
@@ -21,8 +21,4 @@ const makeGetRequest = async (
     console.error("Error fetching data:", error);
     return Promise.reject(error);
   }
-};
-
-module.exports = {
-  makeGetRequest,
 };
