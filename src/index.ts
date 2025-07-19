@@ -1,3 +1,3 @@
-const config = require('./config');
+const config = require("./config");
 
 console.log(`AEMET API Key: ${config.aemetApiKey}`);
