@@ -12,7 +12,9 @@
     "clean": "rm -rf dist",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "bin:fetch-stations": "ts-node src/bin/fetch-stations.ts",
+    "bin:fetch-weather": "ts-node src/bin/fetch-weather-data.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +23,8 @@
   "dependencies": {
     "axios": "^1.10.0",
     "axios-retry": "^4.5.0",
-    "dotenv": "^17.2.0"
+    "dotenv": "^17.2.0",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

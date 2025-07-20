@@ -1,6 +1,20 @@
-import { makeGetRequest } from "./utils/requests";
+import axios from "axios";
+import axiosRetry from "axios-retry";
+import { z } from "zod";
+
 import { getConfig } from "./config";
-import { parseDate } from "./utils/parse";
+import { parseDate, parseUrl } from "./utils/parse";
+
+axiosRetry(axios, { retries: 3 });
+
+import {
+  AemetStationSchema,
+  type AemetStation,
+  AemetDailyWeatherDataSchema,
+  type AemetDailyWeatherData,
+  AemetResponseSchema,
+  AemetResponse,
+} from "./models/aemet";
 
 export class AemetClient {
   private baseUrl: string;
@@ -17,14 +31,86 @@ export class AemetClient {
     }
   }
 
-  async getWeatherData(location: string, date_start: Date, date_end: Date) {
-    // Station 5530E is Granada Airport
-    const endpoint = `/opendata/api/valores/climatologicos/diarios/datos/fechaini/${parseDate(date_start)}/fechafin/${parseDate(date_end)}/estacion/5530E`;
+  async getStationsData(subset?: string[]): Promise<AemetStation[]> {
+    const endpoint =
+      "/opendata/api/valores/climatologicos/inventarioestaciones/todasestaciones";
+    const queryParams = { api_key: this.apiKey };
+
+    // First request to get the URL for the actual data
+    let firstResponse: AemetResponse;
+    try {
+      const url = parseUrl(endpoint, this.baseUrl, queryParams);
+      const response = await axios.get(url);
+      firstResponse = z.parse(AemetResponseSchema, response.data);
+    } catch (error) {
+      console.error("Error fetching station data:", error);
+      throw new Error(
+        `Failed to retrieve station data (first request): ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+
+    // Second request to get the actual station data
+    try {
+      const response = await axios.get(firstResponse.datos);
+      const stations = z.parse(AemetStationSchema.array(), response.data);
+
+      // TODO: Handle this in the request directly, this is overfetching and then filtering
+      if (subset && subset.length > 0) {
+        // Filter stations if a subset is provided
+        return stations.filter((station) =>
+          subset.includes(station.indicativo)
+        );
+      }
+
+      return stations;
+    } catch (error) {
+      console.error("Error fetching station data:", error);
+      throw new Error(
+        `Failed to retrieve station data (second request): ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  async getWeatherData(
+    stationId: string,
+    dateStart: Date,
+    dateEnd: Date
+  ): Promise<AemetDailyWeatherData[]> {
+    const endpoint = `/opendata/api/valores/climatologicos/diarios/datos/fechaini/${parseDate(dateStart)}/fechafin/${parseDate(dateEnd)}/estacion/${stationId}`;
 
     const queryParams = { api_key: this.apiKey };
 
-    return makeGetRequest(endpoint, this.baseUrl, queryParams, {
-      "cache-control": "no-cache",
-    });
+    // First request to get the URL for the actual data
+    let firstResponse: AemetResponse;
+    try {
+      const url = parseUrl(endpoint, this.baseUrl, queryParams);
+      const response = await axios.get(url);
+      firstResponse = z.parse(AemetResponseSchema, response.data);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      throw new Error(
+        `Failed to retrieve weather data for station ${stationId}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+    // Second request to get the actual weather data
+    try {
+      const response = await axios.get(firstResponse.datos);
+
+      const weatherData = z.parse(
+        AemetDailyWeatherDataSchema.array(),
+        response.data
+      );
+
+      return weatherData;
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      throw new Error(
+        `Failed to retrieve weather data for station ${stationId}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
   }
 }
