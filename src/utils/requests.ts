@@ -1,22 +1,24 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-axiosRetry(axios, { retries: 3 });
+import { parseUrl } from "./parse";
 
-const parseUrl = (_url: string, queryParams: Record<string, any>) => {
-  const url = new URL(_url);
-  for (const [key, value] of Object.entries(queryParams)) {
-    url.searchParams.append(key, value);
-  }
-  return url.toString();
-};
+// axiosRetry(axios, { retries: 3 });
 
 export const makeGetRequest = async (
-  url: string,
-  queryParams: Record<string, any>
+  endpoint: string,
+  baseUrl: string,
+  queryParams: Record<string, any>,
+  headers: Record<string, string> = {}
 ) => {
   try {
-    return await axios.get(parseUrl(url, queryParams).toString());
+    console.log(
+      "Making GET request to:",
+      parseUrl(endpoint, baseUrl, queryParams)
+    );
+    const __url = parseUrl(endpoint, baseUrl, queryParams);
+    const _axios = axios.get(__url, { headers });
+    return _axios;
   } catch (error) {
     console.error("Error fetching data:", error);
     return Promise.reject(error);
