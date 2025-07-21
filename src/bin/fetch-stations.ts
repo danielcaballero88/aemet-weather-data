@@ -1,4 +1,4 @@
-import { AemetClient } from "../aemet-client";
+import { AemetClient } from "../clients/aemet-client";
 
 const aemetClient = new AemetClient();
 

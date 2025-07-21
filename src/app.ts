@@ -1,5 +1,5 @@
 import express from "express";
-import { setRoutes } from "./routes/index";
+import { router } from "./routes/index";
 import {
   errorHandler,
   requestLogger,
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(validateRequest);
 
-setRoutes(app);
+app.use("/api", router);
 
 app.use(errorHandler);
 

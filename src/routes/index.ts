@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { IndexController } from "../controllers/index";
+import { DIContainer } from "../di/container";
 
-const router = Router();
-const indexController = new IndexController();
+export const router = Router();
+const container = DIContainer.getInstance();
+const indexController: IndexController = container.getIndexController();
 
-export function setRoutes(app: Router) {
-  app.get("/", (req, res) => {
-    res.send("Welcome to the API");
-  });
-  app.get("/items", indexController.getItems.bind(indexController));
-  app.post("/items", indexController.createItem.bind(indexController));
-}
+router.get("/", (req, res) => {
+  res.send("Welcome to the API");
+});
+router.get(
+  "/daily-weather-data",
+  indexController.getDailyWeatherData.bind(indexController)
+);
