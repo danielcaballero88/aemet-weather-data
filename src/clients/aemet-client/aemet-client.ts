@@ -2,8 +2,8 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { z } from "zod";
 
-import { getConfig } from "../config";
-import { parseDate, parseUrl } from "../utils/parse";
+import { getConfig } from "../../config";
+import { parseDate, parseUrl } from "../../utils/parse";
 
 axiosRetry(axios, { retries: 3 });
 
@@ -14,9 +14,10 @@ import {
   type AemetDailyWeatherData,
   AemetResponseSchema,
   AemetResponse,
-} from "../types/aemet";
+} from "../../types/aemet";
+import { IAemetClient } from "./types";
 
-export class AemetClient {
+export class AemetClient implements IAemetClient {
   private baseUrl: string;
   private apiKey: string;
   constructor() {

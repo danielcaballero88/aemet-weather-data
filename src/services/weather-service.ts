@@ -1,8 +1,12 @@
-import { AemetClient } from "../clients/aemet-client";
-import { AemetDailyWeatherData } from "../types/aemet";
+import { IAemetClient } from "../clients/aemet-client/types";
+import { AemetDailyWeatherData, AemetStation } from "../types/aemet";
 
 export class WeatherService {
-  constructor(private aemetClient: AemetClient) {}
+  constructor(private aemetClient: IAemetClient) {}
+
+  async getStationsData(subset?: string[]): Promise<AemetStation[]> {
+    return this.aemetClient.getStationsData(subset);
+  }
 
   async getDailyWeatherData(): Promise<AemetDailyWeatherData[]> {
     return this.aemetClient.getWeatherData(

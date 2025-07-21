@@ -1,10 +1,10 @@
-import { AemetClient } from "../clients/aemet-client";
+import { AemetClient, IAemetClient } from "../clients/aemet-client";
 import { IndexController } from "../controllers/index";
 import { WeatherService } from "../services/weather-service";
 
 export class DIContainer {
   private static instance: DIContainer;
-  private aemetClient: AemetClient;
+  private aemetClient: IAemetClient;
   private weatherService: WeatherService;
   private indexController: IndexController;
 
