@@ -1,4 +1,4 @@
-import { AemetDailyWeatherData, AemetStation } from "../../types/aemet";
+import { AemetStation, AemetDailyWeatherData } from "./schemas";
 
 export interface IAemetClient {
   getStationsData(subset?: string[]): Promise<AemetStation[]>;

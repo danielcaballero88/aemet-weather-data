@@ -1,4 +1,4 @@
-import { AemetStation, AemetDailyWeatherData } from "../../types/aemet";
+import { AemetStation, AemetDailyWeatherData } from "./schemas";
 import { IAemetClient } from "./types";
 
 export class AemetClientMock implements IAemetClient {

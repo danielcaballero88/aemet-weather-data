@@ -14,7 +14,7 @@ import {
   type AemetDailyWeatherData,
   AemetResponseSchema,
   AemetResponse,
-} from "../../types/aemet";
+} from "./schemas";
 import { IAemetClient } from "./types";
 
 export class AemetClient implements IAemetClient {

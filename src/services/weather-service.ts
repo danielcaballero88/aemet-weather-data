@@ -1,5 +1,8 @@
-import { IAemetClient } from "../clients/aemet-client/types";
-import { AemetDailyWeatherData, AemetStation } from "../types/aemet";
+import {
+  IAemetClient,
+  AemetStation,
+  AemetDailyWeatherData,
+} from "../clients/aemet-client";
 
 export class WeatherService {
   constructor(private aemetClient: IAemetClient) {}

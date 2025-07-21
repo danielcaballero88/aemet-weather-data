@@ -1,6 +1,10 @@
 import { WeatherService } from "./weather-service";
-import { AemetClientMock, IAemetClient } from "../clients/aemet-client";
-import { AemetDailyWeatherData, AemetStation } from "../types/aemet";
+import {
+  AemetClientMock,
+  IAemetClient,
+  AemetStation,
+  AemetDailyWeatherData,
+} from "../clients/aemet-client";
 
 describe("WeatherService", () => {
   let weatherService: WeatherService;
