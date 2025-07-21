@@ -1,6 +1,25 @@
 # Weather Spain
 
-A TypeScript client for fetching weather data from the Spanish meteorological agency AEMET (Agencia Estatal de Meteorología).
+This project is a simple Express API built with TypeScript. It serves as a template for creating RESTful APIs using the Express framework.
+
+## Project Structure
+
+```
+express-api
+├── src
+│   ├── app.ts               # Entry point of the application
+│   ├── controllers          # Contains controllers for handling requests
+│   │   └── index.ts         # Exports IndexController
+│   ├── routes               # Defines the API routes
+│   │   └── index.ts         # Sets up routes using IndexController
+│   ├── middleware           # Contains middleware functions
+│   │   └── index.ts         # Exports middleware functions
+│   └── types                # Defines TypeScript interfaces
+│       └── index.ts         # Exports interfaces for request and response objects
+├── package.json             # npm configuration file
+├── tsconfig.json            # TypeScript configuration file
+└── README.md                # Project documentation
+```
 
 ## Features
 
